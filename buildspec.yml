@@ -1,0 +1,18 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - npm ci || npm install
+  build:
+    commands:
+      - echo "Prepare deployment bundle"
+      - mkdir -p out
+      - rsync -a --delete --exclude '.git*' --exclude 'node_modules' ./ out/
+      - chmod +x out/scripts/*.sh || true
+artifacts:
+  base-directory: out
+  files:
+    - '**/*'
+  discard-paths: no
